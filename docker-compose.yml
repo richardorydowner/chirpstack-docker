@@ -6,6 +6,7 @@ services:
     depends_on:
       - postgresql
       - mosquitto
+    restart: always
 
   chirpstack-application-server:
     image: chirpstack/chirpstack-application-server:3.17.9
@@ -15,6 +16,7 @@ services:
       - ./configuration/chirpstack-application-server:/etc/chirpstack-application-server
     depends_on:
       - chirpstack-network-server
+    restart: always
 
   chirpstack-gateway-bridge:
     image: chirpstack/chirpstack-gateway-bridge:3.14.8
@@ -24,6 +26,7 @@ services:
       - ./configuration/chirpstack-gateway-bridge:/etc/chirpstack-gateway-bridge
     depends_on:
       - mosquitto
+    restart: always
 
   postgresql:
     image: postgres:9.6-alpine
@@ -32,11 +35,13 @@ services:
     volumes:
       - ./configuration/postgresql/initdb:/docker-entrypoint-initdb.d
       - postgresqldata:/var/lib/postgresql/data
+    restart: always
 
   redis:
     image: redis:5-alpine
     volumes:
       - redisdata:/data
+    restart: always
 
   mosquitto:
     image: eclipse-mosquitto:2
@@ -44,6 +49,7 @@ services:
       - 1883:1883
     volumes:
       - ./configuration/eclipse-mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf
+    restart: always
 
 volumes:
   postgresqldata:
